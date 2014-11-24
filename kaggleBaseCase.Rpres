@@ -1,0 +1,50 @@
+kaggleBaseCase
+========================================================
+author: jpOmaha
+date: 11/22/2014
+
+What Determines Your KAGGLE Ranking?
+========================================================
+- A website for data science competitions is www.kaggle.com
+- It hosts open competitions with prizes based on final rankings
+- It also lists cumulative competitor ratings over a moving window
+- These ratings are rankings based on your competition scores
+
+Kaggle Competitor Score:
+
+$latex scoreX = {(base/teamSizeX) * (teamRankX^{rankExpo}) * log(teams, 10) * ((window - lapse) / window)}$
+
+BaseCase
+========================================================
+Team => solo;   Finish => 1st;   Deadline => today
+```{r}
+base <- 100000 #Constant starting score, fixed by Kaggle
+window <- 2 #Sliding window, in years
+teams <- 10 # Variable
+teamSizeX <- 1 # Variable
+teamRankX <- 1 # Variable
+lapse <- 0 # Variable
+rankExpo <- -0.75 #Fixed by Kaggle
+options(scipen=999) # To avoid scientific notation
+(scoreX <- (base/teamSizeX) * (teamRankX^rankExpo) * log(teams, 10) * ((window - lapse) / window))
+```
+
+After setting cor(scoreX, teamSizeX) = -1.0, scoreX = Nonlinear function of teamSizeX 
+========================================================
+
+```{r, echo=FALSE}
+teamSizeX <- c(1:10) # Variable
+teamRankX <- c(10:1) # Variable
+scoreX <- (base/teamSizeX) * (teamRankX^rankExpo) * log(teams, 10) * ((window - lapse) / window)
+plot(scoreX ~ teamSizeX, type="l")
+```
+
+After setting cor(scoreX, teamSizeX) = -1.0, scoreX = Nonlinear function of teamRankX 
+========================================================
+
+```{r, echo=FALSE}
+teamSizeX <- c(1:10) # Variable
+teamRankX <- c(10:1) # Variable
+scoreX <- (base/teamSizeX) * (teamRankX^rankExpo) * log(teams, 10) * ((window - lapse) / window)
+plot(scoreX ~ teamRankX, type="l")
+```
